@@ -1,5 +1,5 @@
 const {
-    listContacts,
+    getContacts,
     getContactById,
     removeContact,
     addContact,
@@ -21,19 +21,23 @@ const argv = program.opts();
 async function invokeAction({ action, id, name, email, phone }) {
     switch (action) {
         case "list":
-            await listContacts();
+            const list = await getContacts();
+            console.table(list);
             break;
 
         case "get":
-            await getContactById(id);
+            const get = await getContactById(id);
+            console.table(get);
             break;
 
         case "add":
             await addContact(name, email, phone);
+            console.table({ action, name, email, phone });
             break;
 
         case "remove":
             await removeContact(id);
+            console.table( {action, id} );
             break;
 
         default:

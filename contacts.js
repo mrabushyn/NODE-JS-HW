@@ -17,40 +17,33 @@ async function writeDb(db) {
     await fs.writeFile(contactsPath, JSON.stringify(db, null, 2));
 }
 
-async function listContacts() {
+async function getContacts() {
     const db = await readDb();
-    console.table(db);
     return db;
 }
 
 async function getContactById(id) {
     const db = await readDb();
-    const contactById = db.filter((contact) => contact.id === id);
-    console.table(contactById);
+    const contactById = db.find((contact) => contact.id === id);
     return contactById;
-}
-
-async function removeContact(id) {
-    const db = await readDb();
-    const updatedDb = db.filter((contact) => contact.id !== id);
-    console.table(updatedDb);
-    await writeDb(updatedDb);
 }
 
 async function addContact(name, email, phone) {
     const id = nanoid();
     const contact = { id, name, email, phone };
-
     const db = await readDb();
-
     db.push(contact);
-
     await writeDb(db);
-    console.table(db);
+}
+
+async function removeContact(id, name, email, phone) {
+    const db = await readDb();
+    const updatedDb = db.filter((contact) => contact.id !== id);
+    await writeDb(updatedDb);
 }
 
 module.exports = {
-    listContacts,
+    getContacts,
     getContactById,
     removeContact,
     addContact,
